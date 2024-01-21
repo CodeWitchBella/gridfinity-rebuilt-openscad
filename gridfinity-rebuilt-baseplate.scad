@@ -17,19 +17,21 @@ $fs = 0.25;
 
 /* [General Settings] */
 // number of bases along x-axis
-gridx = 5;
+gridx = 2;
 // number of bases along y-axis
-gridy = 5;
+gridy = 2;
 
 /* [Screw Together Settings - Defaults work for M3 and 4-40] */
 // screw diameter
-d_screw = 3.35;
+d_screw = 3.2;
 // screw head diameter
 d_screw_head = 5;
 // screw spacing distance
-screw_spacing = .5;
+screw_spacing = .75;
 // number of screws per grid block
-n_screws = 1; // [1:3]
+n_screws = 2; // [1:3]
+
+d_insert = 4.4;
 
 
 /* [Fit to Drawer] */
@@ -47,7 +49,7 @@ fity = 0; // [-1:0.1:1]
 /* [Styles] */
 
 // baseplate styles
-style_plate = 0; // [0: thin, 1:weighted, 2:skeletonized, 3: screw together, 4: screw together minimal]
+style_plate = 3; // [0: thin, 1:weighted, 2:skeletonized, 3: screw together, 4: screw together minimal]
 
 // enable magnet hole
 enable_magnet = true;
@@ -194,9 +196,24 @@ module profile_skeleton() {
 
 module cutter_screw_together(gx, gy, off) {
 
-    screw(gx, gy);
+    inner(false);
+    
+    mirror([1,0,0])
+    inner(true);
+    
     rotate([0,0,90])
-    screw(gy, gx);
+    inner(false);
+    
+    rotate([0,0,90])
+    mirror([1,0,0])
+    inner(true);
+ 
+    module inner(flip) {
+        translate([0,(flip ? -1 : 1) * (d_screw_head + screw_spacing)/2,0])
+        insert(gx, gy);
+        translate([0,(flip ? 1 : -1) * (d_screw_head + screw_spacing)/2,0])
+        screwhole(gx, gy);
+    }
 
     module screw(a, b) {
         copy_mirror([1,0,0])
@@ -205,5 +222,23 @@ module cutter_screw_together(gx, gy, off) {
         pattern_linear(1, n_screws, 1, d_screw_head + screw_spacing)
         rotate([0,90,0])
         cylinder(h=l_grid/2, d=d_screw, center = true);
+    }
+    module screwhole(a, b) {
+        //copy_mirror([1,0,0])
+        translate([a*l_grid/2, 0, -off/2])
+        pattern_linear(1, b, 1, l_grid)
+        //
+        //pattern_linear(1, n_screws, 1, d_screw_head + screw_spacing)
+        rotate([0,90,0])
+        cylinder(h=l_grid/2, d=d_screw, center = true);
+    }
+    module insert(a, b) {
+        //copy_mirror([1,0,0])
+        translate([a*l_grid/2, 0, -off/2])
+        pattern_linear(1, b, 1, l_grid)
+        //
+        //pattern_linear(1, n_screws, 1, d_screw_head + screw_spacing)
+        rotate([0,90,0])
+        cylinder(h=l_grid/2, d=d_insert, center = true);
     }
 }
