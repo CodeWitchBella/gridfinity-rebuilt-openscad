@@ -92,32 +92,49 @@ module gridfinityBaseplate(gridx, gridy, length, dix, diy, sp, sm, sh, fitx, fit
         translate([offsetx,offsety,h_base-0.6])
         rounded_rectangle(dx*2, dy*2, h_base*2, r_base);
 
-        pattern_linear(gx, gy, length) {
-            render(convexity = 6) {
-
-                if (sp == 1)
-                    translate([0,0,-off])
-                    cutter_weight();
-                else if (sp == 2 || sp == 3)
-                    linear_extrude(10*(h_base+off), center = true)
-                    profile_skeleton();
-                else if (sp == 4)
-                    translate([0,0,-5*(h_base+off)])
-                    rounded_square(length-2*r_c2-2*r_c1, 10*(h_base+off), r_fo3);
-
-
-                hole_pattern(){
-                    if (sm) block_base_hole(1);
-
-                    translate([0,0,-off])
-                    if (sh == 1) cutter_countersink();
-                    else if (sh == 2) cutter_counterbore();
-                }
-            }
+        {
+            translate([length/2, length/2, 0])
+            thingy();
+            
+            translate([length/2, -length/2, 0])
+            rotate([0,0,-90])
+            thingy();
+            
+            translate([-length/2, -length/2, 0])
+            rotate([0,0,180])
+            thingy();
+            
+            translate([-length/2, length/2, 0])
+            rotate([0,0,90])
+            thingy();
         }
         if (sp == 3 || sp ==4) cutter_screw_together(gx, gy, off);
     }
 
+
+    module thingy() {
+        render(convexity = 6) {
+
+            if (sp == 1)
+                translate([0,0,-off])
+                cutter_weight();
+            else if (sp == 2 || sp == 3)
+                linear_extrude(10*(h_base+off), center = true)
+                profile_skeleton();
+            else if (sp == 4)
+                translate([0,0,-5*(h_base+off)])
+                rounded_square(length-2*r_c2-2*r_c1, 10*(h_base+off), r_fo3);
+
+
+            hole_pattern(){
+                if (sm) block_base_hole(1);
+
+                translate([0,0,-off])
+                if (sh == 1) cutter_countersink();
+                else if (sh == 2) cutter_counterbore();
+            }
+        }
+    }
 }
 
 function calculate_off(sp, sm, sh) =
@@ -180,9 +197,11 @@ module cutter_counterbore(){
 
 module profile_skeleton() {
     l = l_grid-2*r_c2-2*r_c1;
+    offset = 1;
     minkowski() {
         difference() {
-            square([l-2*r_skel+2*d_clear,l-2*r_skel+2*d_clear], center = true);
+            translate([-offset, -offset, 0])
+            square([l-2*r_skel+2*d_clear-offset,l-2*r_skel+2*d_clear-offset], center = true);
             pattern_circular(4)
             translate([l_grid/2-d_hole_from_side,l_grid/2-d_hole_from_side,0])
             minkowski() {
@@ -231,6 +250,14 @@ module cutter_screw_together(gx, gy, off) {
         //pattern_linear(1, n_screws, 1, d_screw_head + screw_spacing)
         rotate([0,90,0])
         cylinder(h=l_grid/2, d=d_screw, center = true);
+        
+        translate([a*l_grid/2-4, 0, -off/2])
+        pattern_linear(1, b, 1, l_grid)
+        //
+        //pattern_linear(1, n_screws, 1, d_screw_head + screw_spacing)
+        color("green")
+        rotate([0,90,0])
+        cylinder(h=1, d=6, center = true);
     }
     module insert(a, b) {
         //copy_mirror([1,0,0])

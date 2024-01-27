@@ -29,17 +29,17 @@ $fs = 0.25;
 
 /* [General Settings] */
 // number of bases along x-axis
-gridx = 3;
+gridx = 1;
 // number of bases along y-axis
-gridy = 2;
+gridy = 1;
 // bin height. See bin height information and "gridz_define" below.
 gridz = 6;
 
 /* [Linear Compartments] */
 // number of X Divisions (set to zero to have solid bin)
-divx = 0;
+divx = 1;
 // number of Y Divisions (set to zero to have solid bin)
-divy = 0;
+divy = 1;
 
 /* [Cylindrical Compartments] */
 // number of cylindrical X Divisions (mutually exclusive to Linear Compartments)
