@@ -31,7 +31,7 @@ screw_spacing = .75;
 // number of screws per grid block
 n_screws = 2; // [1:3]
 
-d_insert = 4.4;
+d_insert = 4.5;
 
 
 /* [Fit to Drawer] */
