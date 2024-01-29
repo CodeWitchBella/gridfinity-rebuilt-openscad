@@ -72,7 +72,7 @@ module tip() {
     translate([0,0,4.5])
     union() {
         color("red")
-        cylinder(h=34.1, r=5.7/2);
+        cylinder(h=34.1, r=5.7/2+.1);
         
         color("silver")
         translate([0,0,34])
