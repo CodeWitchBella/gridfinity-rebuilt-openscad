@@ -1,7 +1,7 @@
 include <gridfinity-rebuilt-utility.scad>
 
 /* [Setup Parameters] */
-$fa = 4;
+$fa = 2;
 $fs = 0.25;
 
 /* [General Settings] */
