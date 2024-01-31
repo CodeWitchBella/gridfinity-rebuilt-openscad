@@ -16,6 +16,8 @@ gridz = 5;
 x = 7;
 y = 4.7;
 
+
+//intersection() {
 difference() {
 
     union() {
@@ -40,7 +42,11 @@ difference() {
     translate([-10,-10,0])
     rotate([0,0,180])
     pinecil();
-}//*/
+};//*/
+
+/*translate([0,-2,36])
+cube(14);
+}*/
 
 
 //translate([0,42,0])
@@ -72,10 +78,10 @@ module tip() {
     translate([0,0,4.5])
     union() {
         color("red")
-        cylinder(h=34.1, r=5.7/2+.1);
+        cylinder(h=34.1, r=5.7/2+.5);
         
         color("silver")
         translate([0,0,34])
-        cylinder(h=1.6, r=10.7/2+.1);
+        cylinder(h=1.6, r=10.7/2+.3);
     };
 }
